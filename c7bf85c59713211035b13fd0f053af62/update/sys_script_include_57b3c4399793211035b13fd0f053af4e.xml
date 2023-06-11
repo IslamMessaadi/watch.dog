@@ -98,23 +98,12 @@ wlogger.prototype = {
 				logHistory.context_map= logEntry.context_map;
 				logHistory.created_signature= logEntry.created_sig;
 				logHistory.time_stamp= logEntry.ts;
+				logHistory.sequence= logEntry.sequence;
 
 				logHistory.insert();
 				
 			});
-
-			/*var i= 0;
-			var nllg = new GlideRecord("x_307427_watchdog_log");
-			nllg.addEncodedQuery("watchdog="+wdId+ "^type=system");
-			nllg.orderByDesc("created_signature");
-			nllg.query();
-			while (nllg.next()) {
-				//gs.info(nllg.getValue("caller_block"))
-				nllg.time_stamp= nllg.time_stamp + i;
-				nllg.update();
-				i++
-			}*/
-
+			this.mergeLogEntries(wdId);
 		}
 	},
 
@@ -151,26 +140,24 @@ wlogger.prototype = {
 	},
 
 	mergeLogEntries:function(wdId){
-		var toMerge=[];
-		var sslg = new GlideRecord("x_307427_watchdog_log");
-		sslg.addEncodedQuery("watchdog="+wdId+"^type=system");
-		sslg.query();
-		while (sslg.next()) {
-			toMerge.push(sslg.getValue("created_signature"))
+		var caller_f=[];
+		var nllsg = new GlideRecord("x_307427_watchdog_log");
+		nllsg.addEncodedQuery("watchdog="+wdId+"^type=logger");
+		nllsg.orderBy("time_stamp");
+		nllsg.query();
+		while (nllsg.next()) {
+			caller_f.push(nllsg.getValue("caller_block"))
 		}
-		
-		if(toMerge.length){
-			toMerge.forEach(function(tstmp){
-				var nllg = new GlideRecord("x_307427_watchdog_log");
-				nllg.addEncodedQuery("watchdog="+wdId+"^sys_created_onON"+tstmp + "^type=logger");
-				nllg.query();
-				while (nllg.next()) {
-					//gs.info(nllg.getValue("caller_block"))
-					sslg.caller_block= nllg.getValue("caller_block");
-					sslg.update();
-				}
-			});
-			
+
+		var index= 0;
+		var nllg = new GlideRecord("x_307427_watchdog_log");
+		nllg.addEncodedQuery("watchdog="+wdId+"^type=system");
+		nllg.orderBy("sequence");
+		nllg.query();
+		while (nllg.next()) {
+			nllg.caller_block= caller_f[index];
+			nllg.update();
+			index++;
 		}
 	},
 	
@@ -192,13 +179,13 @@ wlogger.logger = function(source, o, index){
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-06-08 12:15:39</sys_created_on>
         <sys_id>57b3c4399793211035b13fd0f053af4e</sys_id>
-        <sys_mod_count>156</sys_mod_count>
+        <sys_mod_count>176</sys_mod_count>
         <sys_name>wlogger</sys_name>
         <sys_package display_value="Watchdog" source="x_307427_watchdog">c7bf85c59713211035b13fd0f053af62</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Watchdog">c7bf85c59713211035b13fd0f053af62</sys_scope>
         <sys_update_name>sys_script_include_57b3c4399793211035b13fd0f053af4e</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-06-11 13:24:33</sys_updated_on>
+        <sys_updated_on>2023-06-11 15:38:30</sys_updated_on>
     </sys_script_include>
 </record_update>

@@ -6,6 +6,7 @@
         <element label="Has Injector" max_length="40" name="has_injector" type="boolean"/>
         <element label="Level" max_length="200" name="level" type="string"/>
         <element label="Message" max_length="4000" name="message" type="string"/>
+        <element label="Sequence" max_length="200" name="sequence" type="string"/>
         <element label="Source" max_length="200" name="source" type="string"/>
         <element label="Time Stamp" max_length="200" name="time_stamp" type="string"/>
         <element choice="1" label="Type" max_length="40" name="type" type="choice">
