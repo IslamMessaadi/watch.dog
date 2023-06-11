@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_ui_policy_action">
+    <sys_ui_policy_action action="INSERT_OR_UPDATE">
+        <cleared>false</cleared>
+        <disabled>ignore</disabled>
+        <field>original_file</field>
+        <mandatory>ignore</mandatory>
+        <sys_class_name>sys_ui_policy_action</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2023-06-10 10:01:01</sys_created_on>
+        <sys_id>c038b59297d7a11035b13fd0f053afeb</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>original_file</sys_name>
+        <sys_package display_value="Watchdog" source="x_307427_watchdog">c7bf85c59713211035b13fd0f053af62</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Watchdog">c7bf85c59713211035b13fd0f053af62</sys_scope>
+        <sys_update_name>sys_ui_policy_action_c038b59297d7a11035b13fd0f053afeb</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2023-06-10 10:01:01</sys_updated_on>
+        <table>x_307427_watchdog_logger</table>
+        <ui_policy display_value="Display Orginal File">d918359297d7a11035b13fd0f053afb9</ui_policy>
+        <visible>true</visible>
+    </sys_ui_policy_action>
+</record_update>

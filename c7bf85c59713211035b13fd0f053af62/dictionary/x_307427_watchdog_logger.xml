@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element db_object_id="32209dc59713211035b13fd0f053afc5" label="Logger" max_length="40" name="x_307427_watchdog_logger" type="collection">
+        <element label="Application File" max_length="32" name="application_file" reference="sys_metadata" reference_qual="sys_class_name=pa_scripts^ORsys_class_name=sys_script_include^EQ" reference_qual_condition="sys_class_name=pa_scripts^ORsys_class_name=sys_script_include^EQ" type="reference" unique="true"/>
+        <element label="Display Original File" max_length="40" name="display_original_file" type="boolean"/>
+        <element default="/* write your snippet of code that you would like to run &#13;&#10;   per each execution originated from this application file.&#13;&#10;*/" label="Logger Script" max_length="8000" name="logger_script" type="script"/>
+        <element display="true" label="Name" max_length="200" name="name" type="string" unique="true"/>
+        <element label="Original File" max_length="8000" name="original_file" read_only="true" type="script"/>
+        <element label="Valid" max_length="40" name="valid" type="boolean"/>
+        <index name="index" unique="true">
+            <element name="application_file"/>
+        </index>
+        <index name="index2" unique="true">
+            <element name="name"/>
+        </index>
+    </element>
+</database>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>public</access>
+        <active>true</active>
+        <api_name>x_307427_watchdog.wlogger</api_name>
+        <caller_access/>
+        <client_callable>false</client_callable>
+        <description>Watchdog logger core logic.</description>
+        <name>wlogger</name>
+        <script><![CDATA[var wlogger = Class.create();
+wlogger.prototype = {
+    initialize: function() {},
+
+	LOGGER_REG_EX: /wlogger\.logger\(\s*'[^']*?'\s*,\s*this\s*,\s*\d+\s*\);/gmi,
+	FUNCTION_BLOCK_REG_EX: /\:\s*function\s*\([\w\s,]*\)\s*{(?!.*wlogger)/gim,
+
+	detectAllmethods:function(obj){var ms=[];for(var m in obj){ms.push(m);}return ms;},
+	
+	_reset:function(str){
+		return str.replace(this.LOGGER_REG_EX, "");
+	},
+
+	_reset_gr:function(wd){
+		var rec= wd.application_file.getRefRecord();
+		var orgScript = rec.script.toString();
+		var regex= this.LOGGER_REG_EX;
+		if(regex.test(orgScript)){
+			orgScript= this._reset(orgScript);
+			gs.info(orgScript)
+			rec.script = orgScript;
+			rec.update();
+		}
+	},
+
+	_hard_reset:function(wdGr){
+		var rec= wdGr.application_file.getRefRecord();
+		return str.replace(/wlogger\.logger\([\w\s,]*, this,\s*?\d+\);/gmi, "");
+	},
+
+	runWtachDogs:function(){
+		var wd = new GlideRecord("x_307427_watchdog_logger");
+		wd.addQuery("valid", "true");
+		wd.query();
+		while (wd.next()) {
+			var logs = new global.LogUtils().getLogsLastMinutesById(1, wd.getValue("application_file"));
+			this.setHistorySystem(logs)
+		}
+
+	},
+
+	getWDBySource: function(source){
+		var wd = new GlideRecord("x_307427_watchdog_logger");
+		wd.addQuery("name", source);
+		wd.query();
+		if (wd.next()) {
+			return wd;
+		}
+
+		return null;
+	},
+
+	setHistoryLogger:function(s, c){
+		var logHistory = new GlideRecord("x_307427_watchdog_log");
+		logHistory.initialize();
+
+		logHistory.watchdog= this.getWDBySource(s).sys_id;
+		logHistory.type= "logger";
+		logHistory.caller_block= c;
+		//logHistory.created_signature= logEntry.created_sig;
+	
+		logHistory.insert();
+	},
+
+	getWDByApplicationId: function(appId){
+		var wd = new GlideRecord("x_307427_watchdog_logger");
+		wd.addQuery("application_file", appId);
+		wd.query();
+		if (wd.next()) {
+			return wd;
+		}
+
+		return null;
+	},
+
+	setHistorySystem:function(logObj){
+		var that = this;
+		if(logObj.length){ 
+			logObj.forEach(function(logEntry){
+				var logHistory = new GlideRecord("x_307427_watchdog_log");
+				logHistory.initialize();
+				logHistory.watchdog= that.getWDByApplicationId(JSON.parse(logEntry.context_map)._script_record).sys_id;
+				logHistory.type= "system";
+				//logHistory.caller_block= c;
+				logHistory.source= logEntry.source;
+				logHistory.message= logEntry.message;
+				logHistory.level= logEntry.level;
+				logHistory.context_map= logEntry.context_map;
+				logHistory.created_signature= logEntry.created_sig;
+				logHistory.insert();
+
+				if(logHistory.isValidRecord()){
+					var nllg = new GlideRecord("x_307427_watchdog_log");
+					nllg.addEncodedQuery("watchdog="+logHistory.watchdog+"^sys_created_onON"+logHistory.created_signature + "^type=logger");
+					nllg.query();
+					while (nllg.next()) {
+						//gs.info(nllg.getValue("caller_block"))
+						logHistory.caller_block= nllg.getValue("caller_block");
+						logHistory.update();
+					}
+				}
+
+			});
+		}
+	},
+
+	validateWD:function(wd){
+		
+		if(wd.valid){
+			var rec= wd.application_file.getRefRecord();
+			orgScript = rec.script.toString();
+			orgScript= this._reset(orgScript);
+
+			var regex= this.FUNCTION_BLOCK_REG_EX;
+
+			if(regex.test(orgScript)){
+				var array1= []; var i= 1;
+				while ((array1 = regex.exec(orgScript)) !== null) {
+					orgScript= orgScript.slice(0,regex.lastIndex) 
+					+ "wlogger.logger('"+ wd.name +"', this, "+i+");" 
+					+ orgScript.slice(regex.lastIndex); 
+					i++;
+				  }
+				rec.script = orgScript;
+				rec.update();
+			}
+
+		}else{
+			this._reset_gr(wd);
+		}
+	},
+
+	copyOriginal:function(wd){
+		var rec= wd.application_file.getRefRecord();
+		wd.original_file = rec.script.toString();
+		wd.update();
+	},
+
+	mergeLogEntries:function(wdId){
+		var toMerge=[];
+		var sslg = new GlideRecord("x_307427_watchdog_log");
+		sslg.addEncodedQuery("watchdog="+wdId+"^type=system");//^sys_created_onON"+dt
+		sslg.query();
+		while (sslg.next()) {
+			toMerge.push(sslg.getValue("created_signature"))
+		}
+		
+		if(toMerge.length){
+			toMerge.forEach(function(tstmp){
+				var nllg = new GlideRecord("x_307427_watchdog_log");
+				nllg.addEncodedQuery("watchdog="+wdId+"^sys_created_onON"+tstmp + "^type=logger");
+				nllg.query();
+				while (nllg.next()) {
+					//gs.info(nllg.getValue("caller_block"))
+					sslg.caller_block= nllg.getValue("caller_block");
+					sslg.update();
+				}
+			});
+			
+		}
+	},
+	
+    type: 'wlogger'
+};
+
+wlogger.logger = function(source, o, index){
+	try{
+		var x = new x_307427_watchdog.wlogger();
+		var r = x.getWDBySource(source);
+		var evaluator = new GlideScopedEvaluator();
+		evaluator.evaluateScript(r, 'logger_script', null);
+		x.setHistoryLogger(source ,x.detectAllmethods(o, index)[index]);
+	}catch(e){
+		gs.info(e.message);
+	}
+};]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2023-06-08 12:15:39</sys_created_on>
+        <sys_id>57b3c4399793211035b13fd0f053af4e</sys_id>
+        <sys_mod_count>138</sys_mod_count>
+        <sys_name>wlogger</sys_name>
+        <sys_package display_value="Watchdog" source="x_307427_watchdog">c7bf85c59713211035b13fd0f053af62</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_scope display_value="Watchdog">c7bf85c59713211035b13fd0f053af62</sys_scope>
+        <sys_update_name>sys_script_include_57b3c4399793211035b13fd0f053af4e</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2023-06-11 11:19:36</sys_updated_on>
+    </sys_script_include>
+</record_update>

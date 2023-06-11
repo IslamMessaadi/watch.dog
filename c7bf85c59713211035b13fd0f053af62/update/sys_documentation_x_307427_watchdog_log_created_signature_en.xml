@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_documentation element="created_signature" label="Created Signature" language="en" table="x_307427_watchdog_log">
+        <sys_documentation action="INSERT_OR_UPDATE">
+            <element>created_signature</element>
+            <help/>
+            <hint/>
+            <label>Created Signature</label>
+            <language>en</language>
+            <name>x_307427_watchdog_log</name>
+            <plural>Created Signatures</plural>
+            <sys_class_name>sys_documentation</sys_class_name>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2023-06-11 10:30:54</sys_created_on>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>Created Signature</sys_name>
+            <sys_package display_value="Watchdog" source="x_307427_watchdog">c7bf85c59713211035b13fd0f053af62</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="Watchdog">c7bf85c59713211035b13fd0f053af62</sys_scope>
+            <sys_update_name>sys_documentation_x_307427_watchdog_log_created_signature_en</sys_update_name>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2023-06-11 10:30:54</sys_updated_on>
+            <url/>
+            <url_target/>
+        </sys_documentation>
+    </sys_documentation>
+</record_update>

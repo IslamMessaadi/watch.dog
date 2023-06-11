@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element db_object_id="e30907ca971f611035b13fd0f053afa4" label="Log" max_length="40" name="x_307427_watchdog_log" type="collection">
+        <element label="Caller Block" max_length="200" name="caller_block" type="string"/>
+        <element label="Context Map" max_length="4000" name="context_map" type="simple_name_values"/>
+        <element label="Created Signature" max_length="40" name="created_signature" type="glide_date_time"/>
+        <element label="Has Injector" max_length="40" name="has_injector" type="boolean"/>
+        <element label="Level" max_length="200" name="level" type="string"/>
+        <element label="Message" max_length="4000" name="message" type="string"/>
+        <element label="Source" max_length="200" name="source" type="string"/>
+        <element choice="1" label="Type" max_length="40" name="type" type="choice">
+            <choice>
+                <element inactive_on_update="false" label="System" sequence="100" value="system"/>
+                <element inactive_on_update="false" label="Logger" sequence="200" value="logger"/>
+            </choice>
+        </element>
+        <element label="WatchDog" max_length="32" name="watchdog" reference="x_307427_watchdog_logger" type="reference"/>
+        <index name="index">
+            <element name="watchdog"/>
+        </index>
+    </element>
+</database>

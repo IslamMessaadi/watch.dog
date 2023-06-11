@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sys_m2m">
+    <sys_m2m action="INSERT_OR_UPDATE">
+        <from_table>x_307427_watchdog_logger</from_table>
+        <m2m_from_field>x_307427_watchdog_logger</m2m_from_field>
+        <m2m_from_label>Log</m2m_from_label>
+        <m2m_table>x_307427_watchdog_m2m_x_307427_wat_syslog</m2m_table>
+        <m2m_to_field>syslog</m2m_to_field>
+        <m2m_to_label>Loggers</m2m_to_label>
+        <sys_class_name>sys_m2m</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2023-06-08 12:09:20</sys_created_on>
+        <sys_id>4b81c0b59793211035b13fd0f053af60</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_307427_watchdog_m2m_x_307427_wat_syslog</sys_name>
+        <sys_package display_value="Watchdog" source="x_307427_watchdog">c7bf85c59713211035b13fd0f053af62</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="Watchdog">c7bf85c59713211035b13fd0f053af62</sys_scope>
+        <sys_update_name>sys_m2m_4b81c0b59793211035b13fd0f053af60</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2023-06-08 12:09:20</sys_updated_on>
+        <to_table>syslog</to_table>
+    </sys_m2m>
+</record_update>
