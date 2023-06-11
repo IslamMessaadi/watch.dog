@@ -16,26 +16,30 @@ wdtest.prototype = {
 	sayHi:function(t) {wlogger.logger('watchdog SBB', this, 1);
 
 		gs.info(t);
+		this.sayHif();
+		this.sayHid();
+		this.sayHi1();
+		this._ssssayHi1();
 	},
 	
 	sayHif:function(tesg, param2){wlogger.logger('watchdog SBB', this, 2);
 
-		gs.info("Hi There!");
+		gs.info("Hi sayHif!");
 	},
 	
 	sayHid:function(  ){wlogger.logger('watchdog SBB', this, 3);
 
-		gs.info("Hi There!");
+		gs.info("Hi sayHid!");
 	},
 	
 	sayHi1:     function  () {wlogger.logger('watchdog SBB', this, 4);
 
-		gs.info("Hi There!");
+		gs.info("Hi sayHi1!");
 	},
 
 	_ssssayHi1: function(z, j, u, r){wlogger.logger('watchdog SBB', this, 5);
 
-		gs.info("Hi There!");
+		gs.info("Hi _ssssayHi1!");
 	},
 
     type: 'wdtest'
@@ -45,13 +49,13 @@ wdtest.prototype = {
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-06-08 12:21:57</sys_created_on>
         <sys_id>2f35c8399793211035b13fd0f053afa5</sys_id>
-        <sys_mod_count>55</sys_mod_count>
+        <sys_mod_count>56</sys_mod_count>
         <sys_name>wdtest</sys_name>
         <sys_package display_value="Watchdog" source="x_307427_watchdog">c7bf85c59713211035b13fd0f053af62</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Watchdog">c7bf85c59713211035b13fd0f053af62</sys_scope>
         <sys_update_name>sys_script_include_2f35c8399793211035b13fd0f053afa5</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-06-10 10:05:05</sys_updated_on>
+        <sys_updated_on>2023-06-11 11:38:47</sys_updated_on>
     </sys_script_include>
 </record_update>

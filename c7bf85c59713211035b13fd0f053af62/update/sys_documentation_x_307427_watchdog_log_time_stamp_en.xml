@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_documentation element="time_stamp" label="Time Stamp" language="en" table="x_307427_watchdog_log">
+        <sys_documentation action="INSERT_OR_UPDATE">
+            <element>time_stamp</element>
+            <help/>
+            <hint/>
+            <label>Time Stamp</label>
+            <language>en</language>
+            <name>x_307427_watchdog_log</name>
+            <plural>Time Stamps</plural>
+            <sys_class_name>sys_documentation</sys_class_name>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2023-06-11 11:44:49</sys_created_on>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>Time Stamp</sys_name>
+            <sys_package display_value="Watchdog" source="x_307427_watchdog">c7bf85c59713211035b13fd0f053af62</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="Watchdog">c7bf85c59713211035b13fd0f053af62</sys_scope>
+            <sys_update_name>sys_documentation_x_307427_watchdog_log_time_stamp_en</sys_update_name>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2023-06-11 11:44:49</sys_updated_on>
+            <url/>
+            <url_target/>
+        </sys_documentation>
+    </sys_documentation>
+</record_update>

@@ -26,7 +26,6 @@ wlogger.prototype = {
 		var regex= this.LOGGER_REG_EX;
 		if(regex.test(orgScript)){
 			orgScript= this._reset(orgScript);
-			gs.info(orgScript)
 			rec.script = orgScript;
 			rec.update();
 		}
@@ -40,6 +39,7 @@ wlogger.prototype = {
 	runWtachDogs:function(){
 		var wd = new GlideRecord("x_307427_watchdog_logger");
 		wd.addQuery("valid", "true");
+		wd.orderByDesc("sys_created_on");
 		wd.query();
 		while (wd.next()) {
 			var logs = new global.LogUtils().getLogsLastMinutesById(1, wd.getValue("application_file"));
@@ -59,15 +59,13 @@ wlogger.prototype = {
 		return null;
 	},
 
-	setHistoryLogger:function(s, c){
+	setHistoryLogger:function(s, c, ts){
 		var logHistory = new GlideRecord("x_307427_watchdog_log");
 		logHistory.initialize();
-
 		logHistory.watchdog= this.getWDBySource(s).sys_id;
 		logHistory.type= "logger";
 		logHistory.caller_block= c;
-		//logHistory.created_signature= logEntry.created_sig;
-	
+		logHistory.time_stamp= ts;
 		logHistory.insert();
 	},
 
@@ -84,32 +82,39 @@ wlogger.prototype = {
 
 	setHistorySystem:function(logObj){
 		var that = this;
+		var wdId= "";
 		if(logObj.length){ 
 			logObj.forEach(function(logEntry){
+				wdId= that.getWDByApplicationId(JSON.parse(logEntry.context_map)._script_record).sys_id;
 				var logHistory = new GlideRecord("x_307427_watchdog_log");
+				
 				logHistory.initialize();
-				logHistory.watchdog= that.getWDByApplicationId(JSON.parse(logEntry.context_map)._script_record).sys_id;
+				
+				logHistory.watchdog= wdId;
 				logHistory.type= "system";
-				//logHistory.caller_block= c;
 				logHistory.source= logEntry.source;
 				logHistory.message= logEntry.message;
 				logHistory.level= logEntry.level;
 				logHistory.context_map= logEntry.context_map;
 				logHistory.created_signature= logEntry.created_sig;
+				logHistory.time_stamp= logEntry.ts;
+
 				logHistory.insert();
-
-				if(logHistory.isValidRecord()){
-					var nllg = new GlideRecord("x_307427_watchdog_log");
-					nllg.addEncodedQuery("watchdog="+logHistory.watchdog+"^sys_created_onON"+logHistory.created_signature + "^type=logger");
-					nllg.query();
-					while (nllg.next()) {
-						//gs.info(nllg.getValue("caller_block"))
-						logHistory.caller_block= nllg.getValue("caller_block");
-						logHistory.update();
-					}
-				}
-
+				
 			});
+
+			/*var i= 0;
+			var nllg = new GlideRecord("x_307427_watchdog_log");
+			nllg.addEncodedQuery("watchdog="+wdId+ "^type=system");
+			nllg.orderByDesc("created_signature");
+			nllg.query();
+			while (nllg.next()) {
+				//gs.info(nllg.getValue("caller_block"))
+				nllg.time_stamp= nllg.time_stamp + i;
+				nllg.update();
+				i++
+			}*/
+
 		}
 	},
 
@@ -148,7 +153,7 @@ wlogger.prototype = {
 	mergeLogEntries:function(wdId){
 		var toMerge=[];
 		var sslg = new GlideRecord("x_307427_watchdog_log");
-		sslg.addEncodedQuery("watchdog="+wdId+"^type=system");//^sys_created_onON"+dt
+		sslg.addEncodedQuery("watchdog="+wdId+"^type=system");
 		sslg.query();
 		while (sslg.next()) {
 			toMerge.push(sslg.getValue("created_signature"))
@@ -178,7 +183,7 @@ wlogger.logger = function(source, o, index){
 		var r = x.getWDBySource(source);
 		var evaluator = new GlideScopedEvaluator();
 		evaluator.evaluateScript(r, 'logger_script', null);
-		x.setHistoryLogger(source ,x.detectAllmethods(o, index)[index]);
+		x.setHistoryLogger(source ,x.detectAllmethods(o, index)[index], new Date().getTime().toExponential(12));
 	}catch(e){
 		gs.info(e.message);
 	}
@@ -187,13 +192,13 @@ wlogger.logger = function(source, o, index){
         <sys_created_by>admin</sys_created_by>
         <sys_created_on>2023-06-08 12:15:39</sys_created_on>
         <sys_id>57b3c4399793211035b13fd0f053af4e</sys_id>
-        <sys_mod_count>138</sys_mod_count>
+        <sys_mod_count>156</sys_mod_count>
         <sys_name>wlogger</sys_name>
         <sys_package display_value="Watchdog" source="x_307427_watchdog">c7bf85c59713211035b13fd0f053af62</sys_package>
         <sys_policy>read</sys_policy>
         <sys_scope display_value="Watchdog">c7bf85c59713211035b13fd0f053af62</sys_scope>
         <sys_update_name>sys_script_include_57b3c4399793211035b13fd0f053af4e</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2023-06-11 11:19:36</sys_updated_on>
+        <sys_updated_on>2023-06-11 13:24:33</sys_updated_on>
     </sys_script_include>
 </record_update>
